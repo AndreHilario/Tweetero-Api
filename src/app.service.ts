@@ -18,7 +18,7 @@ export class AppService {
   getHealth(): string {
     return "I'm okay!";
   }
-  
+
   singup(body: CreateUserDto) {
     const { username, avatar } = body;
     return this.users.push(new User(username, avatar));
@@ -31,13 +31,31 @@ export class AppService {
     if (userFromServer) {
       const tweetObject = {
         username: userFromServer.username,
+        avatar: userFromServer.avatar,
         tweet: tweet,
       };
-      this.tweets.push(tweetObject); 
+      this.tweets.push(tweetObject);
 
       return this.tweets;
     } else {
       throw new Error('User not authorized');
     }
   }
+
+  getLastFifteenTweets(page: number): Tweet[] {
+    const tweetsPerPage = 15;
+    const totalTweets = this.tweets.length;
+
+    const firstTweetIndex = (page ? page - 1 : 0) * tweetsPerPage;
+    const lastTweetIndex = Math.min(firstTweetIndex + tweetsPerPage - 1, totalTweets - 1);
+    const currentPage = this.tweets.slice(firstTweetIndex, lastTweetIndex + 1);
+
+    return currentPage;
+  }
+
+  getTweetsByUsername(username: string): Tweet[] {
+    const userTweets = this.tweets.filter((name) => name.username === username);
+    return userTweets;
+  }
+
 }
