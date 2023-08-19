@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { Tweet } from './entities/tweet.entity';
@@ -15,6 +15,10 @@ export class AppService {
     this.tweets = [];
   }
 
+  getHealth(): string {
+    return "I'm okay!";
+  }
+  
   singup(body: CreateUserDto) {
     const { username, avatar } = body;
     return this.users.push(new User(username, avatar));
@@ -33,7 +37,7 @@ export class AppService {
 
       return this.tweets;
     } else {
-      throw new HttpException('User not authorized', HttpStatus.UNAUTHORIZED);
+      throw new Error('User not authorized');
     }
   }
 }
