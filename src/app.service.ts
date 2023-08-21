@@ -29,12 +29,8 @@ export class AppService {
     const userFromServer = this.users.find((u) => u.username === username);
 
     if (userFromServer) {
-      const tweetObject = {
-        username: userFromServer.username,
-        avatar: userFromServer.avatar,
-        tweet: tweet,
-      };
-      this.tweets.push(tweetObject);
+      const tweetInstance = new Tweet(userFromServer.username, userFromServer.avatar, tweet);
+      this.tweets.push(tweetInstance);
 
       return this.tweets;
     } else {
@@ -46,7 +42,7 @@ export class AppService {
 
     if (page !== undefined && (isNaN(page) || page < 1)) {
       throw new Error('Informe uma página válida!');
-    } 
+    }
     const tweetsPerPage = 15;
     const totalTweets = this.tweets.length;
 
